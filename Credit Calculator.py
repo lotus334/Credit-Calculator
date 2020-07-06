@@ -4,6 +4,8 @@ Created on Mon Jul  6 08:27:41 2020
 
 @author: OKS-8
 """
+from math import log
+from math import ceil
 
 def mon_payment(principals, period):
     global payment
@@ -16,20 +18,46 @@ def mon_payment(principals, period):
         last_payment = principals - (period - 1) * payment
         return f'Your monthly payment = {payment} with last month payment = {last_payment}.'
 
-print('Enter the credit principal:')
-principals = int(input())
-print('What do you want to calculate?')
-print('type "m" - for count of months,')
-print('type "p" - for monthly payment:')
-action = input()
-if action == 'm':
+def count_of_months():
+    print('Enter the credit principal:')
+    principals = int(input())
     print('Enter monthly payment:')
     mon_pay = int(input())
-    period = int(round(principals / mon_pay, 0))
-    print()
-    print(f'It takes {period} months to repay the credit')
-elif action == 'p':
-    print('Enter count of months:')
+    print('Enter credit interest:')
+    interest = int(input())
+    nominal_interest = interest / (12 * 100)
+    period = log((mon_pay / (mon_pay - nominal_interest * principals)),(1 + nominal_interest))
+    rounded_period = ceil(period)
+    years = rounded_period // 12
+    months = rounded_period % 12
+    if years == 0 and months == 1:
+        print(f'You need {months} month to repay this credit')
+    elif years == 1 and months == 1:
+        print(f'You need {years} year and {months} month to repay this credit')
+    elif years == 1 and months != 1:
+        print(f'You need {years} year and {months} months to repay this credit')
+    elif years != 0 and months == 1:
+        print(f'You need {years} years and {months} month to repay this credit')
+    elif years == 0 and months != 1:
+        print(f'You need {months} months to repay this credit')
+    elif years != 0 and months != 1:
+        print(f'You need {years} years and {months} months to repay this credit')
+
+def annuity_monthly_payment():
+    print('Enter credit principal:'
+    principals = int(input())
+    print('Enter count of periods:')
     period = int(input())
-    print()
-    print(mon_payment(principals, period))
+    print('Enter credit interest:')
+
+def calculate():
+    print('What do you want to calculate?')
+    print('type "n" - for count of months,')
+    print('type "a" - for annuity monthly payment,')
+    print('type "p" - for credit principal:')
+    action = input()
+    if action == 'n':
+        count_of_months()
+    elif action == 'a':
+        annuity_monthly_payment()
+calculate()
