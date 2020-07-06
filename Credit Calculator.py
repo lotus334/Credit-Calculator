@@ -6,6 +6,7 @@ Created on Mon Jul  6 08:27:41 2020
 """
 from math import log
 from math import ceil
+from math import floor
 
 def mon_payment(principals, period):
     global payment
@@ -24,7 +25,7 @@ def count_of_months():
     print('Enter monthly payment:')
     mon_pay = int(input())
     print('Enter credit interest:')
-    interest = int(input())
+    interest = float(input())
     nominal_interest = interest / (12 * 100)
     period = log((mon_pay / (mon_pay - nominal_interest * principals)),(1 + nominal_interest))
     rounded_period = ceil(period)
@@ -41,14 +42,29 @@ def count_of_months():
     elif years == 0 and months != 1:
         print(f'You need {months} months to repay this credit')
     elif years != 0 and months != 1:
-        print(f'You need {years} years and {months} months to repay this credit')
+        print(f'You need {years} years and {months} months to repay this credit!')
 
 def annuity_monthly_payment():
-    print('Enter credit principal:'
+    print('Enter credit principal:')
     principals = int(input())
     print('Enter count of periods:')
     period = int(input())
     print('Enter credit interest:')
+    interest = float(input())
+    nominal_interest = interest / (12 * 100)
+    ordinary_annuity = ceil(principals * (nominal_interest * (1 + nominal_interest)**period) / ((1 + nominal_interest)**period - 1))
+    print(f'Your annuity payment = {ordinary_annuity}!')
+
+def credit_principal():
+    print('Enter monthly payment:')
+    ordinary_annuity = float(input())
+    print('Enter count of periods:')
+    period = int(input())
+    print('Enter credit interest:')
+    interest = float(input())
+    nominal_interest = interest / (12 * 100)
+    principals = ceil(ordinary_annuity / ((nominal_interest * (1 + nominal_interest)**period) / ((1 + nominal_interest)**period - 1)))-1
+    print(f'Your credit principal = {principals}!')
 
 def calculate():
     print('What do you want to calculate?')
@@ -60,4 +76,6 @@ def calculate():
         count_of_months()
     elif action == 'a':
         annuity_monthly_payment()
+    elif action == 'p':
+        credit_principal()
 calculate()
